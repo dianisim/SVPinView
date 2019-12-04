@@ -8,7 +8,14 @@
 
 import UIKit
 
+protocol BackspaceFieldDelegate {
+    func textFieldDidDelete(_ textField: UITextField)
+}
+
 class SVPinField: UITextField {
+    
+    var backspaceDelegate: BackspaceFieldDelegate?
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(UIResponderStandardEditActions.copy(_:)) ||
             action == #selector(UIResponderStandardEditActions.cut(_:)) ||
@@ -19,5 +26,10 @@ class SVPinField: UITextField {
             return false
         }
         return super.canPerformAction(action, withSender: sender)
+    }
+    
+    override func deleteBackward() {
+        super.deleteBackward()
+        backspaceDelegate?.textFieldDidDelete(self)
     }
 }

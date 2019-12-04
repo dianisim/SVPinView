@@ -86,7 +86,7 @@ public class SVPinView: UIView {
         collectionView.register(collectionViewNib, forCellWithReuseIdentifier: reuseIdentifier)
         flowLayout.scrollDirection = .vertical //weird!!!
         collectionView.isScrollEnabled = false
-                
+        
         self.addSubview(view)
         view.frame = bounds
         view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
@@ -136,9 +136,9 @@ public class SVPinView: UIView {
         // secure text after a bit
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             if textField.text == "" {
-                textField.text = " "
+                textField.text = ""
                 placeholderLabel.isHidden = false
-                textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
+                //                textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
             } else {
                 placeholderLabel.isHidden = true
                 if self.shouldSecureText { textField.text = self.secureCharacter } else {}
@@ -199,7 +199,7 @@ public class SVPinView: UIView {
             containerView.layer.borderWidth = isActive ? activeBorderLineThickness : borderLineThickness
             containerView.layer.borderColor = isActive ? activeBorderLineColor.cgColor : borderLineColor.cgColor
         }
-     }
+    }
     
     fileprivate func refreshPinView() {
         view.removeFromSuperview()
@@ -255,7 +255,7 @@ public class SVPinView: UIView {
             //secure text after a bit
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
                 if textField.text == "" {
-                    textField.text = " "
+                    textField.text = ""
                     placeholderLabel.isHidden = false
                 } else {
                     if self.shouldSecureText { textField.text = self.secureCharacter } else {}
@@ -286,8 +286,8 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
         // Setting up textField
         textField.tag = 101 + indexPath.row
-        textField.text = " "
-        textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
+        textField.text = ""
+        //        textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
         textField.tintColor = textColor
@@ -299,6 +299,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.inputAccessoryView = self.pinInputAccessoryView
         
         textField.delegate = self
+        textField.backspaceDelegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         placeholderLabel.text = ""
@@ -359,7 +360,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
 }
 // MARK: - TextField Methods -
-extension SVPinView : UITextFieldDelegate
+extension SVPinView : UITextFieldDelegate, BackspaceFieldDelegate
 {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         let text = textField.text!
@@ -368,7 +369,7 @@ extension SVPinView : UITextFieldDelegate
         
         if text.count == 0 {
             textField.isSecureTextEntry = false
-            textField.text =  " "
+            textField.text =  ""
             placeholderLabel.isHidden = false
         }
         
@@ -392,5 +393,9 @@ extension SVPinView : UITextFieldDelegate
             return false
         }
         return true
+    }
+    
+    func textFieldDidDelete(_ textField: UITextField) {
+        textFieldDidChange(textField)
     }
 }
