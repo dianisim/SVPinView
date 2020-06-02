@@ -242,7 +242,7 @@ public class SVPinView: UIView {
         password = []
         for (index,char) in pin.enumerated() {
             
-            guard index < pinLength else { return }
+            guard index < pinLength else { break }
             
             //Get the first textField
             let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as! SVPinField
@@ -264,8 +264,8 @@ public class SVPinView: UIView {
             
             // store text
             password.append(String(char))
-            validateAndSendCallback()
         }
+        validateAndSendCallback()
     }
 }
 
