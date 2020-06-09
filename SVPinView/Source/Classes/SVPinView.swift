@@ -35,6 +35,7 @@ public class SVPinView: UIView {
     @IBInspectable public var secureCharacter:String = "\u{25CF}"
     @IBInspectable public var interSpace:CGFloat = 5
     @IBInspectable public var textColor:UIColor = UIColor.black
+    @IBInspectable public var placeholderColor:UIColor = UIColor.black
     @IBInspectable public var shouldSecureText:Bool = true
     @IBInspectable public var allowsWhitespaces:Bool = true
     @IBInspectable public var placeholder:String = ""
@@ -54,6 +55,7 @@ public class SVPinView: UIView {
     public var style:SVPinViewStyle = .underline
     
     public var font:UIFont = UIFont.systemFont(ofSize: 15)
+    public var placeholderFont:UIFont = UIFont.systemFont(ofSize: 15)
     public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
     public var becomeFirstResponderAtIndex:Int? = nil
     public var isContentTypeOneTimeCode:Bool = true
@@ -303,7 +305,8 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         placeholderLabel.text = ""
-        placeholderLabel.textColor = self.textColor.withAlphaComponent(0.5)
+        placeholderLabel.textColor = placeholderColor
+        placeholderLabel.font = placeholderFont
         
         stylePinField(containerView: containerView, underLine: underLine, isActive: false)
         
